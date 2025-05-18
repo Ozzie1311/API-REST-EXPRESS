@@ -19,8 +19,6 @@ class ProfesorController {
   consultarDetalle(req, res) {
     const { id } = req.params;
     try {
-      const { dni, nombre, apellido, email, telefono, profesion, id } =
-        req.body;
       db.query(`SELECT * FROM profesores WHERE id = ?`, [id], (err, rows) => {
         if (err) {
           res.status(400).send(err);
@@ -34,13 +32,12 @@ class ProfesorController {
 
   ingresar(req, res) {
     try {
-      const { id, dni, nombre, apellido, email, telefono, profesion } =
-        req.body;
+      const { dni, nombre, apellido, email, telefono, profesion } = req.body;
       db.query(
         `INSERT INTO oswaldo.profesores
               (id, dni, nombre, apellido, email, telefono, profesion)
               VALUES(NULL, ?, ?, ?, ?, ?, ?);`,
-        [id, dni, nombre, apellido, email, telefono, profesion],
+        [dni, nombre, apellido, email, telefono, profesion],
         (err, rows) => {
           if (err) {
             res.status(400).send(err);
@@ -54,6 +51,7 @@ class ProfesorController {
       res.status(500).send(err.message);
     }
   }
+
   actualizarDetalle(req, res) {
     const { id } = req.params;
     try {
@@ -81,9 +79,23 @@ class ProfesorController {
 
   eliminar(req, res) {
     const { id } = req.params;
-    res.json({
-      msg: `Eliminando profesor con el id:${id}`,
-    });
+    try {
+      db.query(
+        `DELETE FROM oswaldo.profesores WHERE id = ?;`,
+        [id],
+        (err, rows) => {
+          if (err) {
+            res.status(400).send(err.message);
+          } else {
+            res.status(200).json({
+              mensaje: "Registros de profesor actualizados éxitosamente.",
+            });
+          }
+        }
+      );
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
   }
 }
 

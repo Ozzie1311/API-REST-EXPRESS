@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const estudiantesRoutes = require("./views/estudiantesRoutes.js");
 const profesoresRoutes = require("./views/profesoresRoutes.js");
-const cursosRoutes = require("./views/directivosRoutes.js");
+const cursosRoutes = require("./views/cursosRoutes.js");
 
 const app = express();
 app.use(express.json());

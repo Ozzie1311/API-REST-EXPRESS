@@ -13,7 +13,7 @@ class CursosController {
         [nombre, descripcion, profesor_id],
         (err, rows) => {
           if (err) {
-            res.status(400).send(err);
+            res.status(400).send(err.message);
           }
           if (rows.affectedRows) {
             res
@@ -89,9 +89,36 @@ class CursosController {
         (err, rows) => {
           if (err) {
             res.status(400).send(err);
+          } else {
+            res
+              .status(200)
+              .json({ mensaje: "Registro eliminado éxitosamente." });
           }
-          if (rows.affectedRows == 1) {
-            res.status(200).json({ mensaje: "Registros eliminados con éxito" });
+        }
+      );
+    } catch (err) {
+      res.status(500).send(err.message);
+    }
+  }
+
+  asociarEstudiante(req, res) {
+    try {
+      const { curso_id, estudiante_id } = req.body;
+      db.query(
+        `INSERT INTO oswaldo.cursos_estudiantes
+                  (curso_id, estudiante_id)
+                  VALUES(?, ?);`,
+        [curso_id, estudiante_id],
+        (err, rows) => {
+          if (err) {
+            res.status(400).send(err.message);
+          } else {
+            res
+              .status(200)
+              .json({
+                mensaje: "Estudiante asociado con éxito",
+                id: rows.insertId,
+              });
           }
         }
       );
